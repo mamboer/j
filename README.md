@@ -4,7 +4,7 @@ j
 J - A slim javascript module management framework
 
 Demo
-==
+====
 
 ``` js
 J(function($,p,pub){
