@@ -54,32 +54,38 @@
 					<!--hero_unit_about-->
 					<div class="hero-unit-bd">
 						<pre class="brush:js">
+							/*
+							 * A common J module implementation
+							 */
 							J(function($,p,pub){
+								//!!Note 1 - $ default to jQuery,
+								//You can also use other dom libraries,
+								//just open j.core.js replace jQuery to whatever you want!
 								
-								//私有对象
-								p.xxx={};
+								//!!Note 2 - p = private
+								//J advice you keep all private things to p
+								// E.g 1, private variables
+								p.xxx=1;
 			
-								//子模块
+								// E.g 2, private sub modules
+								// You can organize you module code in a logical MVC style,
+								// But,it's not required!
 								p.subModule1 = {
-									M:{
-										
-									},
-									V:{
-									
-									},
-									C:{
+									M:{ /* module data */},
+									V:{ /* module view - things on UI layer */},
+									C:{ /* module controller - prepare data from M,send it to V for UI rendering */
 										init:function(){},
 										onLoad:function(){}
 									}
 								};
-
-								//公共方法。别的模块通过J.moduleName.method1调用
-								pub.method1 = function(){
-									//方法逻辑
-								};
-
+								//!!Note 3 - module identify - THIS's required!!
 								pub.id="testModule";
-
+								
+								//!!Note 4 - public api
+								//You then can call J.moduleName.method1 inside other J modules
+								pub.method1 = function(){
+									//Logic implementation blabla
+								};
 							});
 						</pre>
 					</div>
