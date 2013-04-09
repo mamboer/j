@@ -2,11 +2,11 @@
 * 简单的html模板解析方法
 * @public
 * @function
-* @name J#EvalTpl
+* @name J#evalTpl
 * @example
 *	var str="<a href=/u/@{uid}>@{username}</a>",
 *		data={uid:1,username:'levin'};
-*	alert(J.fn.evalTpl(str,data));
+*	alert(J.evalTpl(str,data));
 *	//提示信息为："<a href=/u/1>levin</a>"
 * @param {string} str html模板，字段用%包含
 * @param {Object} data json数据
