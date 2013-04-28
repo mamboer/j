@@ -3,7 +3,7 @@
  * @summary 一个简单的js模块管理框架
  * @desc 实现Module Pattern，解决最基本的js代码组织问题。不包含依赖管理，动态加载等功能，如需要推荐使用SeaJS或RequireJS。注：JF假设你使用jQuery，如果您使用别的库，可以针对性改一下代码。
  * @author Levin
- * @version 1.0.0
+ * @version 1.0.1
  * @example 
 	J(function($,p,pub){
 		p.submodule = {
@@ -66,20 +66,12 @@ var J = (function($){
 			k = m;
 			m = J[m];
 			if (m.onLoad) {
-				try {
-					m.onLoad(m);
-					delete m.onLoad;
-				} catch (e) {
-					alert('Error load module [' + k + ']:' + e.message || e.description);
-				}
+				m.onLoad(m);
+				delete m.onLoad;
 			};
 			if(m._){
-				try{
-					p.loadSub(m._);
-					delete m._;
-				}catch(e){
-					alert('Error load sub module [' + k + ']:' + e.message || e.description);
-				}
+				p.loadSub(m._);
+				delete m._;
 			};
 		};
 	};
@@ -160,11 +152,11 @@ var J = (function($){
 	* 初始化J框架，页面js逻辑的唯一入口。一般至于</body>标签之前，用户向整个app传递参数用
 	* @public
 	* @function
-	* @name J.fn#init
+	* @name J#init
 	* @param {Object} opts 配置对象
 	* @example
 	*
-	*	J.fn.init({x:'kk',y:'zz'});
+	*	J.init({x:'kk',y:'zz'});
 	*
 	*/
 	pub.init = function (opts) {
@@ -180,20 +172,12 @@ var J = (function($){
 			k = m;
 			m = J[m];
 			if (m.init) {
-				try {
-					m.init();
-					delete m.init;
-				} catch (e) {
-					alert('Error init module [' + k + ']:' + e.message || e.description);
-				}
+				m.init();
+				delete m.init;
 			};
 			if(m._){
-				try{
-					p.initSub(m._);
-					//delete m._; //p.onLoaded neet it!
-				}catch(e){
-					alert('Error init sub module [' + k + ']:' + e.message || e.description);
-				}
+				p.initSub(m._);
+				//delete m._; //p.onLoaded neet it!
 			};
 		};
 		p.initEvents();
