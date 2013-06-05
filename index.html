@@ -74,8 +74,8 @@
 									M:{ /* module data */},
 									V:{ /* module view - things on UI layer */},
 									C:{ /* module controller - prepare data from M,send it to V for UI rendering */
-										init:function(){},
-										onLoad:function(){}
+										_init:function(){},
+										_onLoad:function(){}
 									}
 								};
 								//!!Note 3 - module identify - THIS's required!!
@@ -116,10 +116,10 @@
 			//Module1
 			J(function($,p,pub){
 				p.submodule = {
-					init:function(){
+					_init:function(){
 						J.info(pub.id,'init submodule');
 					},
-					onLoad:function(){
+					_onLoad:function(){
 						J.info(pub.id,'load submodule');
 					}
 				};
@@ -136,10 +136,10 @@
 			//Module2
 			J(function($,p,pub){
 				p.submodule = {
-					init:function(){
+					_init:function(){
 						J.info(pub.id,'init submodule');
 					},
-					onLoad:function(){
+					_onLoad:function(){
 						J.info(pub.id,'load submodule');
 					}
 				};

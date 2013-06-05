@@ -3,11 +3,11 @@
  * @summary 一个简单的js模块管理框架
  * @desc 实现Module Pattern，解决最基本的js代码组织问题。不包含依赖管理，动态加载等功能，如需要推荐使用SeaJS或RequireJS。注：JF假设你使用jQuery，如果您使用别的库，可以针对性改一下代码。
  * @author Levin
- * @version 1.0.1
+ * @version 1.0.2
  * @example 
 	J(function($,p,pub){
 		p.submodule = {
-			init:function(){
+			_init:function(){
 				alert('init submodule');
 			}
 		};
@@ -58,16 +58,14 @@ var J = (function($){
 	* 如果你要新增一个$(callback)或$(document).ready,请将你的callback方法放在onLoaded方法体内
 	*/
 	p.onLoaded = function () {
-		var k = null;
 		for (var m in J) {
 			if (m==='init'||m==='onLoad') {
 				continue;
 			};
-			k = m;
 			m = J[m];
-			if (m.onLoad) {
-				m.onLoad(m);
-				delete m.onLoad;
+			if ( p.isFunc(m._onLoad) ) {
+				m._onLoad.call(m);
+				delete m._onLoad;
 			};
 			if(m._){
 				p.loadSub(m._);
@@ -84,7 +82,10 @@ var J = (function($){
 	p.initEvents = function (opts) {
 		$(document).ready(p.onLoaded);
 	};
-
+	//function test
+	p.isFunc = function(v){
+		return (v && typeof(v)==='function');
+	};
 	/**
 	 * 初始化子模块。如果你的一个模块里面有子模块p.sub1，p.sub1又具有init方法的时候，可以在pub.Init中调用InitSub方法让JF对子模块进行初始化。
 	 * @private
@@ -99,18 +100,18 @@ var J = (function($){
 				continue;
 			};
 
-			if (c.init) {
-				c.init.call(c);
-				delete c.init;
+			if ( p.isFunc(c._init) ) {
+				c._init.call(c);
+				delete c._init;
 			};
 
 			for (var c1 in c) {
 				c1 = c[c1];
 				if (!c1) continue;
 
-				if (c1.init) {
-					c1.init.call(c1);
-					delete c1.init;
+				if (p.isFunc(c1._init)) {
+					c1._init.call(c1);
+					delete c1._init;
 				};
 			};
 		};
@@ -129,25 +130,24 @@ var J = (function($){
 				continue;
 			};
 
-			if (c.onLoad) {
-				c.onLoad.call(c);
-				delete c.onLoad;
+			if (p.isFunc(c._onLoad)) {
+				c._onLoad.call(c);
+				delete c._onLoad;
 			};
 
 			for (var c1 in c) {
 				c1 = c[c1];
 				if (!c1) continue;
 
-				if (c1.onLoad) {
-					c1.onLoad.call(c1);
-					delete c1.onLoad;
+				if (p.isFunc(c1._onLoad)) {
+					c1._onLoad.call(c1);
+					delete c1._onLoad;
 				};
 			};
 		};
 	};
-
 	/*public area
-	+++++++++++++++++++++++++++++*/
+	======================*/
 	/**
 	* 初始化J框架，页面js逻辑的唯一入口。一般至于</body>标签之前，用户向整个app传递参数用
 	* @public
@@ -160,20 +160,16 @@ var J = (function($){
 	*
 	*/
 	pub.init = function (opts) {
-
 		J.opts = p.opts = opts = $.extend(opts || {},J.opts||{});
-		var k = null;
 		for (var m in J) {
 
 			if (m==='init'||m==='onLoad') {
 				continue;
 			};
-
-			k = m;
 			m = J[m];
-			if (m.init) {
-				m.init();
-				delete m.init;
+			if (p.isFunc(m._init)) {
+				m._init.call(m);
+				delete m._init;
 			};
 			if(m._){
 				p.initSub(m._);
@@ -184,8 +180,6 @@ var J = (function($){
 	};
 	//给外部调用（例如android的webview调用)
 	pub.onLoad = p.onLoaded;
-
-
 	//shadow copy
 	for (var m in pub) {
 		if (!m) {

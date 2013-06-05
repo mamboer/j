@@ -201,10 +201,10 @@
 		<pre class="brush:js">
             J(function($,p,pub){
                 p.submodule = {
-                    init:function(){
+                    _init:function(){
                         J.info(pub.id,'init submodule');
                     },
-                    onLoad:function(){
+                    _onLoad:function(){
                         J.info(pub.id,'load submodule');
                     }
                 };
