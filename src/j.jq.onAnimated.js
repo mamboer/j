@@ -9,7 +9,10 @@
 	$.fn.onAnimated = function (cbk) {
 
 		return this.each(function(){
-		
+			if (cbk === false) {
+				$(this).unbind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd");
+				return;
+			}
 			$(this).bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd",cbk);
 			
 		});
