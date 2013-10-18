@@ -57,34 +57,28 @@
 							/*
 							 * A common J module implementation
 							 */
-							J(function($,p,pub){
-								//!!Note 1 - $ default to jQuery,
-								//You can also use other dom libraries,
-								//just open j.core.js replace jQuery to whatever you want!
+							J('foo',function(M,V,C){
+								//Note the obvious M(model data),V(view),C(controller) variables.
+								//J recommends to split your codes into M/V/C layer logically.
 								
-								//!!Note 2 - p = private
-								//J advice you keep all private things to p
-								// E.g 1, private variables
-								p.xxx=1;
-			
-								// E.g 2, private sub modules
-								// You can organize you module code in a logical MVC style,
-								// But,it's not required!
-								p.subModule1 = {
-									M:{ /* module data */},
-									V:{ /* module view - things on UI layer */},
-									C:{ /* module controller - prepare data from M,send it to V for UI rendering */
-										_init:function(){},
-										_onLoad:function(){}
-									}
+								//model data 
+								M.xxx=1;
+
+								//view - ui staff
+								V.$btn:$('#btn1');
+
+								//controller
+								//special action _init is an interface to J
+								C._init = function(){};
+								// action 'sayHi'
+								C.sayHi = function(){
+									alert('hi from J');
 								};
-								//!!Note 3 - module identify - THIS's required!!
-								pub.id="testModule";
-								
-								//!!Note 4 - public api
-								//You then can call J.moduleName.method1 inside other J modules
-								pub.method1 = function(){
-									//Logic implementation blabla
+
+								//public methods .We can invoke J.foo.method1 externally.
+								this.method1 = function(){
+									//logic
+									alert(this.id==='foo');
 								};
 							});
 						</pre>
@@ -114,41 +108,36 @@
 		<script src="src/j.log.js"></script>
 		<script type="text/javascript">
 			//Module1
-			J(function($,p,pub){
-				p.submodule = {
+			J('foo',function(M,V,C){
+				M.submodule = {
 					_init:function(){
-						J.info(pub.id,'init submodule');
+						J.info(J.foo.id,'init submodule');
 					},
 					_onLoad:function(){
-						J.info(pub.id,'load submodule');
+						J.info(J.foo.id,'load submodule');
 					}
 				};
 
-				pub.hi = function(){
-					J.info(pub.id,'hi!!!');
+				this.sayHi = function(){
+					J.info(this.id,'hi!!!');
 				};
-				pub.id = 'testModule1';
-
 				//J.info('this',this);
-
 			});
 
 			//Module2
-			J(function($,p,pub){
-				p.submodule = {
+			J('bar',function(M,V,C){
+				M.submodule = {
 					_init:function(){
-						J.info(pub.id,'init submodule');
+						J.info(J.bar.id,'init submodule');
 					},
 					_onLoad:function(){
-						J.info(pub.id,'load submodule');
+						J.info(J.bar.id,'load submodule');
 					}
 				};
 
-				pub.hi = function(){
-					J.info(pub.id,'hi!!!');
+				this.sayHi = function(){
+					J.info(this.id,'hi!!!');
 				};
-				pub.id = 'testModule2';
-
 				//J.info('this',this);
 
 			});
