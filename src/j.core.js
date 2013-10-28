@@ -3,22 +3,27 @@
  * @summary 一个简单的js模块管理框架
  * @desc 实现Module Pattern，解决最基本的js代码组织问题。不包含依赖管理，动态加载等功能，如需要推荐使用SeaJS或RequireJS。注：JF假设你使用jQuery，如果您使用别的库，可以针对性改一下代码。
  * @author Levin
- * @version 1.0.2
+ * @version 1.1.0
  * @example 
 	J(function($,p,pub){
 		p.submodule = {
 			_init:function(){
-				alert('init submodule');
+				console.log('init submodule');
 			}
 		};
 
 		pub.hi = function(){
-			alert('hi from module'+pub.id);
+			console.log('hi from module'+pub.id);
 		};
 		pub.id = 'testModule';
 	});
  */
 var J = (function($){
+
+    var jSay = window['alert'];
+    if(window['console']&&window['console'].error){
+        jSay = window['console'].error;
+    };
 
 	return (function(module){
 		var type = typeof(module);
@@ -34,11 +39,11 @@ var J = (function($){
 			module.call(J,$,module1._,module1);
 
 			if (!module1.id) {
-				alert('A J module require a public id property!');
+				jSay('A J module require a public id property!');
 				return;
 			};
 			if (J[module1.id]) {
-				alert('A J module with id "'+module1.id+'" exists!');
+				jSay('A J module with id "'+module1.id+'" exists!');
 				return;
 			};
 			//add a J module
