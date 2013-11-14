@@ -128,8 +128,8 @@ J('GOD',function(M,V,C){
      * @param {String} action 模块回调函数名称，J一共定义了有两个回调接口:1,_onLoad 页面内容加载完毕后的回调；2，_init
      */
     C.exec = function(action,destroyMVCAfterExec){
-         for (var m in JJ) {
-            m = JJ[m];
+         for (var m in J) {
+            m = J[m];
             if( (!m.J) || typeof(m)!=='object') continue;
             if( C.isFunc(m[action]) ) {
                 m[action].call(m);
