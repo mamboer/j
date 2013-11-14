@@ -20,6 +20,7 @@
 var J = (function(){
 
     var modUtil = {
+        J:"2.0.0",
         //export global event
         EVT:function(name){
             J.EVT[this.id][name]=this.id+'_'+name+'.'+this.id;
@@ -60,9 +61,12 @@ var J = (function(){
 J.__mode="silent";
 J.EVT={};
 J.proxy=function(_this,func){
-    return (function(){
-        return func.apply(_this,arguments);
-    });
+    if(typeof(func)==='function'){
+        return (function(){
+            return func.apply(_this,arguments);
+        });
+    };
+    return func;
 };
 
 /**
@@ -124,19 +128,17 @@ J('GOD',function(M,V,C){
      * @param {String} action 模块回调函数名称，J一共定义了有两个回调接口:1,_onLoad 页面内容加载完毕后的回调；2，_init
      */
     C.exec = function(action,destroyMVCAfterExec){
-        for (var m in J) {
-            if(typeof(J[m])!=='object') continue;
-            //skip special objects
-            if ( m==='GOD' || m==='EVT' || m==='init'/*jquery compatibility*/||m==='onLoad') {continue;};
-            m = J[m];
+         for (var m in JJ) {
+            m = JJ[m];
+            if( (!m.J) || typeof(m)!=='object') continue;
             if( C.isFunc(m[action]) ) {
                 m[action].call(m);
                 delete m[action];
             };
-            var mvc = ['_M','_V','_C'],len=mvc.length;
-            for(var i=0;i<len;i++){
-                m[mvc[i]] && C.execSub(m[mvc[i]],action);
-                destroyMVCAfterExec && (delete m[mvc[i]]);
+            var mvc = {'_M':1,'_V':1,'_C':1};
+            for(var c in mvc){
+                m[c] && C.execSub(m[c],action);
+                destroyMVCAfterExec && (delete m[c]);
             };
         };
     };
