@@ -105,15 +105,13 @@ J('GOD',function(M,V,C){
         if(typeof(sub)!=='object') return;
         for (var c in sub) {
             c = sub[c];
-            if (!c) {
+            if ( (!c) || (c.jquery) || (!c[action]) ) {
                 continue;
             };
             if ( C.isFunc(c[action]) ) {
                 c[action].call(c);
                 delete c[action];
             };
-            //sub sub module
-            C.execSub(c,action);
         };
     };
     /**
