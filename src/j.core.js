@@ -103,6 +103,10 @@ J('GOD',function(M,V,C){
      */
     C.execSub = function(sub,action){
         if(typeof(sub)!=='object') return;
+        if(sub[action]&&C.isFunc(sub[action])){
+            sub[action].call(sub);
+            delete sub[action];
+        };
         for (var c in sub) {
             c = sub[c];
             if ( (!c) || (c.jquery) || (!c[action]) ) {
