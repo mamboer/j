@@ -20,10 +20,17 @@
 var J = (function(){
 
     var modUtil = {
-        J:"2.0.0",
+        J:"2.0.1",
         //export global event
         EVT:function(name){
-            J.EVT[this.id][name]=this.id+'_'+name+'.'+this.id;
+            if( Object.prototype.toString.call( name ) === '[object Array]' ){
+                for(var c in name){
+                    J.EVT[this.id][name[c]]=this.id+'_'+name[c]+'.'+this.id
+                };
+            }else{
+                J.EVT[this.id][name]=this.id+'_'+name+'.'+this.id;
+            };
+            return this;
         }
     };
 
