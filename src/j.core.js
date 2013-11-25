@@ -3,7 +3,7 @@
  * @summary 一个简单的js模块管理框架
  * @desc 实现Module Pattern，解决最基本的js代码组织问题。不包含依赖管理，动态加载等功能，如需要推荐使用SeaJS或RequireJS。注：JF假设你使用jQuery，如果您使用别的库，可以针对性改一下代码。
  * @author Levin
- * @version 2.0.0
+ * @version 2.0.2
  * @example 
     J('id',function(M,V,C){
         C.submodule = {
@@ -20,7 +20,7 @@
 var J = (function(){
 
     var modUtil = {
-        J:"2.0.1",
+        J:"2.0.2",
         //export global event
         EVT:function(name){
             if( Object.prototype.toString.call( name ) === '[object Array]' ){
@@ -37,7 +37,7 @@ var J = (function(){
     var define = function(module,id){
         var module1 = {id:id,_M:{},_V:{},_C:{}},
             jSay = window[J.__mode==='silent'?'throw':'alert'];
-        module.call(module1,module1._M,module1._V,module1._C);
+        
         if (!module1.id) {
             jSay('J complains: A J module require a public id property!');
             return;
@@ -46,11 +46,14 @@ var J = (function(){
             jSay('J complains: A J module with id "'+module1.id+'" exists!');
             return;
         };
-        //add a J module
+
+        //add public J module methods
         J.EVT[module1.id]={};
         for(var c in modUtil){
             module1[c]=J.proxy(module1,modUtil[c]);
         };
+
+        module.call(module1,module1._M,module1._V,module1._C);
         J[module1.id]=module1;
         module1=null;
     };
