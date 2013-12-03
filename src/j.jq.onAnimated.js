@@ -5,17 +5,22 @@
 	 * @function
 	 * @name $.fn.onAnimated
 	 * @param {Function} cbk 事件处理函数
+     * @param {Boolean} isOne 是否一次性事件处理
 	 */
-	$.fn.onAnimated = function (cbk) {
+	$.fn.onAnimated = function (cbk,isOne) {
+        var events = "animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd";
+        isOne = isOne||false;
+        return this.each(function () {
+            if (cbk===false) {
+                $(this).unbind(events);
+                return;
+            }
+            $(this).bind(events, function(e){
+                isOne&&$(this).unbind(events);
+                cbk.call(this);
+            });
 
-		return this.each(function(){
-			if (cbk === false) {
-				$(this).unbind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd");
-				return;
-			}
-			$(this).bind("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd",cbk);
-			
-		});
+        });
 		
 	};
 })(jQuery);
